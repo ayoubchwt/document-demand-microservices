@@ -16,7 +16,7 @@ public class PaymentController {
         return ResponseEntity.ok(paymentUrl);
     }
     @PostMapping("/webhook")
-    public ResponseEntity<Void> handleWebHook(@RequestParam String payload , @RequestHeader("Stripe-Signature") String sigHeader) {
+    public ResponseEntity<Void> handleWebHook(@RequestBody String payload , @RequestHeader("Stripe-Signature") String sigHeader) {
         paymentService.handleWebHook(payload,sigHeader);
         return ResponseEntity.ok().build();
     }
