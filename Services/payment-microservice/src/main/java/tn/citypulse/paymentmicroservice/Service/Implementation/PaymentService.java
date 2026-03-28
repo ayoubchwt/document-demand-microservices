@@ -29,7 +29,7 @@ public class PaymentService implements IPaymentService {
                                     .setPriceData(
                                             SessionCreateParams.LineItem.PriceData.builder()
                                                     .setCurrency("usd")
-                                                    .setUnitAmount(100L) // amount in cents
+                                                    .setUnitAmount(100L)
                                                     .setProductData(
                                                             SessionCreateParams.LineItem.PriceData.ProductData.builder()
                                                                     .setName("Document Demand #" + demandId)
@@ -46,7 +46,7 @@ public class PaymentService implements IPaymentService {
     }
     @Override
     public void handleWebHook(String payload, String signHeader){
-        Event event ;
+        Event event;
         try {
             event = Webhook.constructEvent(payload,signHeader,stripeConfig.getWebhookSecret());
         }

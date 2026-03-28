@@ -1,0 +1,27 @@
+info:
+  name: Add Document
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:8082/demands
+  body:
+    type: json
+    data: |-
+      {
+        "userId": 1,
+        "documentType": "BIRTH_CERTIFICATE",
+        "description": "Request for administrative purposes",
+        "proof": {
+          "type": "NATIONAL_ID",
+          "fileUrl": "https://example.com/proofs/idcard.pdf"
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

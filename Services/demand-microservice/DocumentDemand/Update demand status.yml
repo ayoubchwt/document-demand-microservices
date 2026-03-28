@@ -1,0 +1,19 @@
+info:
+  name: Update demand status
+  type: http
+  seq: 6
+
+http:
+  method: PUT
+  url: http://localhost:8082/demands/1
+  body:
+    type: json
+    data: |
+      "IN_REVIEW"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
