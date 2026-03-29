@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import tn.citypulse.documentdemand.dto.Attachment.CreateAttachmentDTO;
 import tn.citypulse.documentdemand.dto.Demand.CreateDemandDTO;
 import tn.citypulse.documentdemand.dto.Demand.DemandResponseDTO;
+import tn.citypulse.documentdemand.dto.Demand.UpdateDemandDTO;
 import tn.citypulse.documentdemand.feign.PaymentClient;
 import tn.citypulse.documentdemand.mapper.AttachmentMapper;
 import tn.citypulse.documentdemand.mapper.DemandMapper;
@@ -14,6 +15,7 @@ import tn.citypulse.documentdemand.model.Demand;
 import tn.citypulse.documentdemand.model.Enum.DemandStatus;
 import tn.citypulse.documentdemand.service.IAttachmentService;
 import tn.citypulse.documentdemand.service.IDemandService;
+import tn.citypulse.shared.dto.PaymentUpdateDto;
 import tn.citypulse.shared.enums.PaymentStatus;
 
 import java.util.List;
@@ -49,14 +51,15 @@ public class DemandController {
         return ResponseEntity.ok(demandMapper.toDTO(demand));
     }
 
-    @PutMapping("/DemandStatus/{id}")
+    @PutMapping("/pemandStatus/{id}")
+    // to do : changing DemandStatus to String and using enum.name()
     public ResponseEntity<DemandResponseDTO> updateDemandStatus(@PathVariable Long id, @RequestBody DemandStatus status) {
         Demand updated = demandService.updateDemandStatus(id, status);
         return ResponseEntity.ok(demandMapper.toDTO(updated));
     }
-    @PutMapping("/PaymentStatus/{id}")
-    public ResponseEntity<Void> updatePaymentStatus(@PathVariable Long id, @RequestBody PaymentStatus status) {
-        Demand updated = demandService.updatePaymentStatus(id,status);
+    @PutMapping("/paymentStatus")
+    public ResponseEntity<Void> updatePaymentStatus(@RequestBody PaymentUpdateDto dto) {
+        Demand updated = demandService.updatePaymentStatus(dto.getDemandId(),dto.getPaymentStatus());
         return ResponseEntity.ok().build();
     }
 

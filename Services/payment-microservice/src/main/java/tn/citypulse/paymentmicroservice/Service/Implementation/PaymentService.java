@@ -7,13 +7,17 @@ import com.stripe.net.Webhook;
 import com.stripe.param.checkout.SessionCreateParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import tn.citypulse.paymentmicroservice.Feign.DocumentDemandClient;
 import tn.citypulse.paymentmicroservice.Service.IPaymentService;
 import tn.citypulse.paymentmicroservice.config.StripeConfig;
+import tn.citypulse.shared.dto.PaymentUpdateDto;
+import tn.citypulse.shared.enums.PaymentStatus;
 
 @Service
 @RequiredArgsConstructor
 public class PaymentService implements IPaymentService {
     private final StripeConfig stripeConfig;
+    private final DocumentDemandClient documentDemandClient;
     @Override
     public String createPayment(Long demandId) {
         // TO-DO : getting the demand price
@@ -56,22 +60,34 @@ public class PaymentService implements IPaymentService {
         switch (event.getType()) {
             case "checkout.session.completed" -> {
                 try {
-                    Session session = (Session) event.getDataObjectDeserializer().deserializeUnsafe();
-                    System.out.print("payment went successful");
-                    String demandId = session.getMetadata().get("demandId");
+                    Long demandId = extractDemandId(event);
+                    // mark the demand payment as paid
+                    System.out.println("demand id : " + demandId);
+                    PaymentUpdateDto paymentUpdateDto = new PaymentUpdateDto(demandId,PaymentStatus.PAID);
+                    documentDemandClient.updatePaymentStatus(paymentUpdateDto);
                 } catch (EventDataObjectDeserializationException e) {
                     throw new RuntimeException("Could not deserialize session : " + e);
                 }
-                // to do , mark demand request as paid in db
             }
             case "payment_intent.payment_failed" -> {
-                // should be logged but I don't have logger
-                System.out.print("payment failed");
+                try {
+                    Long demandId = extractDemandId(event);
+                    System.out.println("demand id : " + demandId);
+                    // mark the demand payment as failed
+                    PaymentUpdateDto paymentUpdateDto = new PaymentUpdateDto(demandId,PaymentStatus.FAILED);
+                    documentDemandClient.updatePaymentStatus(paymentUpdateDto);
+                } catch (EventDataObjectDeserializationException e) {
+                    throw new RuntimeException("Could not deserialize session : " + e);
+                }
             }
             default -> {
                 // should be logged but I don't have logger
                 System.out.println("Unhandled event: " + event.getType());
             }
         }
+    }
+    private Long extractDemandId(Event event) throws EventDataObjectDeserializationException {
+        Session session = (Session) event.getDataObjectDeserializer().deserializeUnsafe();
+        return Long.parseLong(session.getMetadata().get("demandId"));
     }
 }
