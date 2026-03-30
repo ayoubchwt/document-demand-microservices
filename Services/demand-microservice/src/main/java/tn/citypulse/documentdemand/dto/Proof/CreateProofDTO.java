@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 import tn.citypulse.documentdemand.model.Enum.ProofType;
 
 @Data
@@ -13,8 +14,8 @@ import tn.citypulse.documentdemand.model.Enum.ProofType;
 public class CreateProofDTO {
 
     @NotNull(message = "Proof type is required")
-    private ProofType type;
+    private String type;
 
-    @NotBlank(message = "Proof file URL is required")
-    private String fileUrl;
+    @NotNull(message = "Proof file is required")
+    private MultipartFile file;
 }

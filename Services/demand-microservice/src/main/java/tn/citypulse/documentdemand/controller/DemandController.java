@@ -7,28 +7,32 @@ import org.springframework.web.bind.annotation.*;
 import tn.citypulse.documentdemand.dto.Attachment.CreateAttachmentDTO;
 import tn.citypulse.documentdemand.dto.Demand.CreateDemandDTO;
 import tn.citypulse.documentdemand.dto.Demand.DemandResponseDTO;
-import tn.citypulse.documentdemand.dto.Demand.UpdateDemandDTO;
+import tn.citypulse.documentdemand.dto.Proof.CreateProofDTO;
 import tn.citypulse.documentdemand.feign.PaymentClient;
 import tn.citypulse.documentdemand.mapper.AttachmentMapper;
 import tn.citypulse.documentdemand.mapper.DemandMapper;
+import tn.citypulse.documentdemand.mapper.ProofMapper;
 import tn.citypulse.documentdemand.model.Demand;
 import tn.citypulse.documentdemand.model.Enum.DemandStatus;
+import tn.citypulse.documentdemand.model.Enum.ProofType;
+import tn.citypulse.documentdemand.model.Proof;
 import tn.citypulse.documentdemand.service.IAttachmentService;
+import tn.citypulse.documentdemand.service.ICloudinaryService;
 import tn.citypulse.documentdemand.service.IDemandService;
 import tn.citypulse.shared.dto.PaymentUpdateDto;
-import tn.citypulse.shared.enums.PaymentStatus;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/demands")
+    @RequestMapping("/demands")
 @AllArgsConstructor
 public class DemandController {
     private final IDemandService demandService;
     private final IAttachmentService attachmentService;
+    private final ICloudinaryService cloudinaryService;
     private final DemandMapper demandMapper;
     private final AttachmentMapper attachmentMapper;
-    private final PaymentClient paymentClient;
+    private final ProofMapper proofMapper;
 
     @PostMapping
     public ResponseEntity<DemandResponseDTO> createDemand(@RequestBody CreateDemandDTO dto) {
@@ -52,7 +56,6 @@ public class DemandController {
     }
 
     @PutMapping("/pemandStatus/{id}")
-    // to do : changing DemandStatus to String and using enum.name()
     public ResponseEntity<DemandResponseDTO> updateDemandStatus(@PathVariable Long id, @RequestBody DemandStatus status) {
         Demand updated = demandService.updateDemandStatus(id, status);
         return ResponseEntity.ok(demandMapper.toDTO(updated));
@@ -70,6 +73,23 @@ public class DemandController {
         Demand updated = demandService.attachDocument(id, attachmentMapper.toEntity(dto));
         return ResponseEntity.ok(demandMapper.toDTO(updated));
     }
+    @PutMapping("/{id}/proof")
+    public ResponseEntity<DemandResponseDTO> proofDocument(
+            @PathVariable Long id,
+            @ModelAttribute CreateProofDTO dto) {
+        ProofType proofType;
+        try {
+            proofType = ProofType.valueOf(dto.getType().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid proof type: " + dto.getType());
+        }
+        String uploadUrl = cloudinaryService.uploadFile(dto.getFile(), "Proof");
+        Proof proof = proofMapper.toEntity(dto);
+        proof.setType(proofType);
+        proof.setFileUrl(uploadUrl);
+        Demand updated = demandService.proofDocument(id, proof);
+        return ResponseEntity.ok(demandMapper.toDTO(updated));
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDemand(@PathVariable Long id) {
@@ -85,16 +105,6 @@ public class DemandController {
                 .toList();
         return ResponseEntity.ok(response);
     }
-    /*
-    @GetMapping("/municipality/{municipalityId}")
-    public ResponseEntity<List<DemandResponseDTO>> getDemandsByMunicipality(@PathVariable Long municipalityId) {
-        List<Demand> demands = demandService.getDemandsByMunicipality(municipalityId);
-        List<DemandResponseDTO> response = demands.stream()
-                .map(demandMapper::toDTO)
-                .toList();
-        return ResponseEntity.ok(response);
-    }
-    */
     @GetMapping("/status/{status}")
     public ResponseEntity<List<DemandResponseDTO>> getDemandsByStatus(@PathVariable DemandStatus status) {
         List<Demand> demands = demandService.getDemandsByStatus(status);
@@ -102,9 +112,5 @@ public class DemandController {
                 .map(demandMapper::toDTO)
                 .toList();
         return ResponseEntity.ok(response);
-    }
-    @GetMapping("/payment")
-    public ResponseEntity<String> payment(){
-        return ResponseEntity.ok(paymentClient.hello());
     }
 }

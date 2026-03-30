@@ -1,6 +1,5 @@
 package tn.citypulse.paymentmicroservice.config;
 import jakarta.annotation.PostConstruct;
-import org.hibernate.boot.internal.Abstract;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import  com.stripe.Stripe;
