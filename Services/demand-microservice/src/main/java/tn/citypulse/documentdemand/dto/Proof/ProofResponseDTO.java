@@ -10,9 +10,7 @@ public class ProofResponseDTO {
 
     private Long id;
 
-    private ProofType proofType;
-
     private String fileUrl;
 
-    private String description;
+    private String type;
 }

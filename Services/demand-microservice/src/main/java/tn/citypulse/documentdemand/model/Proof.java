@@ -14,6 +14,7 @@ public class Proof {
     private Long id;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ProofType type;
 
     @Column(nullable = false)

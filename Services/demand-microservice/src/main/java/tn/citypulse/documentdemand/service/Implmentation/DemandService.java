@@ -25,6 +25,7 @@ public class DemandService implements IDemandService {
             throw new NullDemandException();
         }
         demand.setStatus(DemandStatus.IN_REVIEW);
+        demand.setPaymentStatus(PaymentStatus.UNPAID);
         return demandRepository.save(demand);
     }
 

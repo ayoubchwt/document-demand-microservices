@@ -8,6 +8,7 @@ import tn.citypulse.documentdemand.dto.Attachment.CreateAttachmentDTO;
 import tn.citypulse.documentdemand.dto.Demand.CreateDemandDTO;
 import tn.citypulse.documentdemand.dto.Demand.DemandResponseDTO;
 import tn.citypulse.documentdemand.dto.Proof.CreateProofDTO;
+import tn.citypulse.documentdemand.dto.Proof.ProofResponseDTO;
 import tn.citypulse.documentdemand.feign.PaymentClient;
 import tn.citypulse.documentdemand.mapper.AttachmentMapper;
 import tn.citypulse.documentdemand.mapper.DemandMapper;
@@ -19,6 +20,7 @@ import tn.citypulse.documentdemand.model.Proof;
 import tn.citypulse.documentdemand.service.IAttachmentService;
 import tn.citypulse.documentdemand.service.ICloudinaryService;
 import tn.citypulse.documentdemand.service.IDemandService;
+import tn.citypulse.documentdemand.service.IProofService;
 import tn.citypulse.shared.dto.PaymentUpdateDto;
 
 import java.util.List;
@@ -29,6 +31,7 @@ import java.util.List;
 public class DemandController {
     private final IDemandService demandService;
     private final IAttachmentService attachmentService;
+    private final IProofService proofService;
     private final ICloudinaryService cloudinaryService;
     private final DemandMapper demandMapper;
     private final AttachmentMapper attachmentMapper;
@@ -90,7 +93,12 @@ public class DemandController {
         Demand updated = demandService.proofDocument(id, proof);
         return ResponseEntity.ok(demandMapper.toDTO(updated));
     }
-
+    @GetMapping("/{id}/proof")
+    public ResponseEntity<ProofResponseDTO> getDocumentProof(
+            @PathVariable Long id) {
+        Proof proof = proofService.getProofByDemandId(id);
+        return ResponseEntity.ok(proofMapper.toDTO(proof));
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDemand(@PathVariable Long id) {
         demandService.deleteDemand(id);
