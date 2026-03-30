@@ -20,6 +20,7 @@ public class Demand {
     private Long userId;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private DocumentType documentType;
 
     @Column(length = 1000)

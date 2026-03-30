@@ -1,5 +1,6 @@
 package tn.citypulse.documentdemand.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ProblemDetail> handleGeneric(Exception exception) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         problemDetail.setTitle("Internal server Error");
-        problemDetail.setDetail("Something went wrong on the server");
+        problemDetail.setDetail(exception.getMessage());
         problemDetail.setProperty("timestamp",LocalDateTime.now());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problemDetail);

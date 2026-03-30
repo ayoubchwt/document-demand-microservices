@@ -5,11 +5,14 @@ info:
 
 http:
   method: PUT
-  url: http://localhost:8082/demands/1
+  url: http://localhost:8082/demands/paymentStatus
   body:
     type: json
     data: |
-      "IN_REVIEW"
+      {
+        "demandId" : 1,
+        "paymentStatus" : "PAID"
+      }
   auth: inherit
 
 settings:
