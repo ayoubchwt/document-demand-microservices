@@ -10,6 +10,4 @@ public class AttachmentResponseDTO {
     private Long id;
 
     private String fileUrl;
-
-    private String municipalityId;
 }

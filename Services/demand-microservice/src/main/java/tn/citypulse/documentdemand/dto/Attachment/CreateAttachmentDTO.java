@@ -11,9 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class CreateAttachmentDTO {
 
-    @NotNull(message = "Municipality ID is required")
-    private Long municipalityId;
-
     @NotNull(message = "File is required")
     private MultipartFile file;
+
 }

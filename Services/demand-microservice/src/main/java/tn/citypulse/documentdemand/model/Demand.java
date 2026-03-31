@@ -20,6 +20,9 @@ public class Demand {
     private Long userId;
 
     @Column(nullable = false)
+    private Long municipalityId;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private DocumentType documentType;
 

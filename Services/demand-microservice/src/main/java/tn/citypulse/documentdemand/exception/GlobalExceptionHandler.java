@@ -35,14 +35,32 @@ public class GlobalExceptionHandler {
             IllegalArgumentException.class
     })
     public ResponseEntity<ProblemDetail> handleBadRequest(RuntimeException exception) {
-        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setTitle("Bad Request");
         problemDetail.setDetail(exception.getMessage());
         problemDetail.setProperty("timestamp", LocalDateTime.now());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
     }
+    // 409 conflict
+    @ExceptionHandler(InvalidPaymentStateException.class)
+    public ResponseEntity<ProblemDetail> handlePaymentError(InvalidPaymentStateException exception) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.CONFLICT);
+        problemDetail.setTitle("Payment Not Allowed");
+        problemDetail.setDetail(exception.getMessage());
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
 
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problemDetail);
+    }
+    // 409 conflict
+    @ExceptionHandler(InvalidDemandStateException.class)
+    public ResponseEntity<ProblemDetail> handleDemandStateError(InvalidDemandStateException exception) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.CONFLICT);
+        problemDetail.setTitle("Invalid Demand State");
+        problemDetail.setDetail(exception.getMessage());
+        problemDetail.setProperty("timestamp", LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(problemDetail);
+    }
     // fall back (generic)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> handleGeneric(Exception exception) {

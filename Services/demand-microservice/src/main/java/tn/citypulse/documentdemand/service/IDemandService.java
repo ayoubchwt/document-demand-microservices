@@ -22,7 +22,7 @@ public interface IDemandService {
 
     List<Demand> getDemandsByStatus(DemandStatus demandStatus);
 
-    Demand updateDemandStatus(Long id , DemandStatus demandStatus);
+    Demand updateDemandStatus(Demand demand);
 
     Demand updatePaymentStatus(Long id , PaymentStatus paymentStatus);
 

@@ -2,6 +2,7 @@ package tn.citypulse.documentdemand.dto.Demand;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import tn.citypulse.documentdemand.dto.Attachment.AttachmentResponseDTO;
 import tn.citypulse.documentdemand.dto.Proof.ProofResponseDTO;
 import tn.citypulse.documentdemand.model.Enum.DemandStatus;
 import tn.citypulse.shared.enums.DocumentType;
@@ -26,4 +27,6 @@ public class DemandResponseDTO {
     private LocalDateTime updatedAt;
 
     private ProofResponseDTO proof;
+
+    private AttachmentResponseDTO attachment;
 }

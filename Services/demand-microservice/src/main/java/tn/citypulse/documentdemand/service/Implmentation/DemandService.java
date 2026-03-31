@@ -1,6 +1,8 @@
 package tn.citypulse.documentdemand.service.Implmentation;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import tn.citypulse.documentdemand.exception.InvalidDemandStateException;
+import tn.citypulse.documentdemand.exception.InvalidPaymentStateException;
 import tn.citypulse.documentdemand.exception.NoSuchDemandExistsException;
 import tn.citypulse.documentdemand.exception.NullDemandException;
 import tn.citypulse.documentdemand.model.Attachment;
@@ -64,12 +66,16 @@ public class DemandService implements IDemandService {
     }
     
     @Override
-    public Demand updateDemandStatus(Long id , DemandStatus demandStatus){
-        if(demandStatus == null) {
+    public Demand updateDemandStatus(Demand demand){
+        if(demand.getStatus() == null) {
             throw new NullDemandException("The provided demand status for the demand is null");
         }
-        Demand demand = getDemandOrThrow(id);
-        demand.setStatus(demandStatus);
+        Demand demandToUpdate = getDemandOrThrow(demand.getId());
+        if (demandToUpdate.getStatus() != DemandStatus.IN_REVIEW) {
+            throw new IllegalStateException("Only IN_REVIEW demands can be updated");
+        }
+        demandToUpdate.setStatus(demand.getStatus());
+        demandToUpdate.setMunicipalityId(demand.getMunicipalityId());
         return demandRepository.save(demand);
     }
     @Override
@@ -78,6 +84,9 @@ public class DemandService implements IDemandService {
             throw new NullDemandException("The provided payment status for the demand is null");
         }
         Demand demand = getDemandOrThrow(id);
+        if (demand.getStatus() != DemandStatus.APPROVED) {
+            throw new InvalidDemandStateException("Only IN_REVIEW demands can be updated");
+        }
         demand.setPaymentStatus(paymentStatus);
         return demandRepository.save(demand);
     }
@@ -85,9 +94,15 @@ public class DemandService implements IDemandService {
     @Override
     public Demand attachDocument(Long id , Attachment attachment){
         if(attachment == null) {
-            throw new NullDemandException("The provided attachment for the demand is null");
+            throw new NullDemandException("Attachment is null");
         }
         Demand demand = getDemandOrThrow(id);
+        if (demand.getStatus() != DemandStatus.APPROVED) {
+            throw new InvalidDemandStateException("Cannot attach document: demand is not approved");
+        }
+        if (demand.getPaymentStatus() != PaymentStatus.PAID) {
+            throw new InvalidPaymentStateException("Cannot attach document: payment not completed");
+        }
         demand.setAttachment(attachment);
         return demandRepository.save(demand);
     }
