@@ -16,6 +16,8 @@ public class DemandResponseDTO {
 
     private Long userId;
 
+    private Long municipalityId;
+
     private DocumentType documentType;
 
     private String description;

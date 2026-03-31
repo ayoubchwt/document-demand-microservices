@@ -23,7 +23,9 @@ import tn.citypulse.documentdemand.service.IAttachmentService;
 import tn.citypulse.documentdemand.service.ICloudinaryService;
 import tn.citypulse.documentdemand.service.IDemandService;
 import tn.citypulse.documentdemand.service.IProofService;
-import tn.citypulse.shared.dto.PaymentUpdateDto;
+import tn.citypulse.shared.dto.DocumentTypeResponseDTO;
+import tn.citypulse.shared.dto.PaymentUpdateDTO;
+import tn.citypulse.shared.enums.DocumentType;
 
 import java.util.List;
 
@@ -69,40 +71,28 @@ public class DemandController {
         return ResponseEntity.ok(demandMapper.toDTO(updated));
     }
 
-    // update demand status when user create a payment
+    // update demand payment status when user create a payment
     @PutMapping("/paymentStatus")
-    public ResponseEntity<Void> updatePaymentStatus(@RequestBody PaymentUpdateDto dto) {
+    public ResponseEntity<Void> updatePaymentStatus(@RequestBody PaymentUpdateDTO dto) {
         Demand updated = demandService.updatePaymentStatus(dto.getDemandId(),dto.getPaymentStatus());
         return ResponseEntity.ok().build();
     }
-
+    // getting the demand type ( and the price) for the payment
+    @GetMapping("/DemandType/{id}")
+    public ResponseEntity<DocumentTypeResponseDTO> getDemandType(@PathVariable Long id) {
+        DocumentType type = demandService.getDemandTypeById(id);
+        return ResponseEntity.ok(new DocumentTypeResponseDTO(type));
+    }
     // attach the requested doc by municipality after the docPaymentStatus is registered as "PAID"
-    @PutMapping("/{id}/attachment")
-    public ResponseEntity<DemandResponseDTO> attachDocument(
-            @PathVariable Long id,
-            @ModelAttribute CreateAttachmentDTO dto) {
-        String uploadUrl = cloudinaryService.uploadFile(dto.getFile(), "Attachment");
-        Attachment attachment = attachmentMapper.toEntity(dto);
-        attachment.setFileUrl(uploadUrl);
-        Demand updated = demandService.attachDocument(id, attachment);
+    @PutMapping("/attachment")
+    public ResponseEntity<DemandResponseDTO> attachDocument(@ModelAttribute CreateAttachmentDTO dto) {
+        Demand updated = demandService.attachDocument(dto.getId(), dto.getFile());
         return ResponseEntity.ok(demandMapper.toDTO(updated));
     }
     // attach proof of the demand by user
-    @PutMapping("/{id}/proof")
-    public ResponseEntity<DemandResponseDTO> proofDocument(
-            @PathVariable Long id,
-            @ModelAttribute CreateProofDTO dto) {
-        ProofType proofType;
-        try {
-            proofType = ProofType.valueOf(dto.getType().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid proof type: " + dto.getType());
-        }
-        String uploadUrl = cloudinaryService.uploadFile(dto.getFile(), "Proof");
-        Proof proof = proofMapper.toEntity(dto);
-        proof.setType(proofType);
-        proof.setFileUrl(uploadUrl);
-        Demand updated = demandService.proofDocument(id, proof);
+    @PutMapping("/proof")
+    public ResponseEntity<DemandResponseDTO> proofDocument( @ModelAttribute CreateProofDTO dto) {
+        Demand updated = demandService.proofDocument(dto.getId(), dto.getFile(), dto.getType());
         return ResponseEntity.ok(demandMapper.toDTO(updated));
     }
     // get the proof by the municipality

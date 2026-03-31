@@ -10,7 +10,7 @@ public enum DocumentType {
     DocumentType(Long price) {
         this.price = price;
     }
-    Long getPrice() {
+    public Long getPrice() {
         return this.price;
     }
 }

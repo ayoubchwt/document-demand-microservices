@@ -1,0 +1,22 @@
+info:
+  name: Update demand payment status
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: http://localhost:8082/demands/paymentStatus
+  body:
+    type: json
+    data: |
+      {
+        "demandId" : 1,
+        "paymentStatus" : "PAID"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

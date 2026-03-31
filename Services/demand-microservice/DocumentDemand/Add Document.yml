@@ -5,15 +5,14 @@ info:
 
 http:
   method: POST
-  url: http://localhost:8082/demands
+  url: http://localhost:8087/demands
   body:
     type: json
     data: |-
       {
         "userId": 1,
         "documentType": "BIRTH_CERTIFICATE",
-        "description": "Request for administrative purposes",
-        "Nerdery" : 1
+        "description": "Request for administrative purposes"
       }
   auth: inherit
 

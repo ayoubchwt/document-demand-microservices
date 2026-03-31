@@ -10,8 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateAttachmentDTO {
+    @NotNull(message = "Document demand id is required")
+    private Long id;
 
     @NotNull(message = "File is required")
     private MultipartFile file;
-
 }

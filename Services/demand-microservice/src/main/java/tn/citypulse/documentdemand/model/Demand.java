@@ -19,7 +19,7 @@ public class Demand {
     @Column(nullable = false)
     private Long userId;
 
-    @Column(nullable = false)
+    @Column
     private Long municipalityId;
 
     @Column(nullable = false)

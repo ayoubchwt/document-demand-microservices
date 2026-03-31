@@ -13,6 +13,9 @@ import tn.citypulse.documentdemand.model.Enum.ProofType;
 @NoArgsConstructor
 public class CreateProofDTO {
 
+    @NotNull(message = "Document demand id is required")
+    private Long id;
+
     @NotNull(message = "Proof type is required")
     private String type;
 

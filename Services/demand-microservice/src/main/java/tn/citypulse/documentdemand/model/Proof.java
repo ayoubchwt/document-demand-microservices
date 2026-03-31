@@ -17,7 +17,6 @@ public class Proof {
     @Enumerated(EnumType.STRING)
     private ProofType type;
 
-    @Column(nullable = false)
     private String fileUrl;
 
     @Column()

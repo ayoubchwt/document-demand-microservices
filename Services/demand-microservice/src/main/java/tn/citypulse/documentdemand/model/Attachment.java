@@ -13,11 +13,7 @@ public class Attachment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String fileUrl;
-
-    @Column(nullable = false)
-    private Long municipalityId;
 
     @Column
     private LocalDateTime createdAt;

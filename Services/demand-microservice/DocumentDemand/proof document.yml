@@ -5,7 +5,7 @@ info:
 
 http:
   method: PUT
-  url: http://localhost:8082/demands/3/proof
+  url: http://localhost:8087/demands/proof
   body:
     type: multipart-form
     data:
@@ -18,6 +18,10 @@ http:
         value:
           - C:\Users\Eclipse\Desktop\Documents\cv.pdf
         contentType: File
+      - name: id
+        type: text
+        value: "1"
+        contentType: Text
   auth: inherit
 
 settings:

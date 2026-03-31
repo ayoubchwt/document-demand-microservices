@@ -1,7 +1,7 @@
 info:
   name: get demand by user id
   type: http
-  seq: 12
+  seq: 9
 
 http:
   method: GET

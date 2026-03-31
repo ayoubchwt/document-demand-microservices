@@ -1,7 +1,7 @@
 info:
   name: get demand by status
   type: http
-  seq: 14
+  seq: 11
 
 http:
   method: GET

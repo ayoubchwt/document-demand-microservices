@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import tn.citypulse.paymentmicroservice.Feign.DocumentDemandClient;
 import tn.citypulse.paymentmicroservice.Service.IPaymentService;
 import tn.citypulse.paymentmicroservice.config.StripeConfig;
-import tn.citypulse.shared.dto.PaymentUpdateDto;
+import tn.citypulse.shared.dto.PaymentUpdateDTO;
 import tn.citypulse.shared.enums.PaymentStatus;
 
 @Service
@@ -20,7 +20,7 @@ public class PaymentService implements IPaymentService {
     private final DocumentDemandClient documentDemandClient;
     @Override
     public String createPayment(Long demandId) {
-        // TO-DO : getting the demand price
+        Long price = documentDemandClient.getDemandType(demandId).getType().getPrice();
         try {
             SessionCreateParams params = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.PAYMENT)
@@ -33,7 +33,7 @@ public class PaymentService implements IPaymentService {
                                     .setPriceData(
                                             SessionCreateParams.LineItem.PriceData.builder()
                                                     .setCurrency("usd")
-                                                    .setUnitAmount(100L)
+                                                    .setUnitAmount(price * 100L)
                                                     .setProductData(
                                                             SessionCreateParams.LineItem.PriceData.ProductData.builder()
                                                                     .setName("Document Demand #" + demandId)
@@ -63,8 +63,8 @@ public class PaymentService implements IPaymentService {
                     Long demandId = extractDemandId(event);
                     // mark the demand payment as paid
                     System.out.println("demand id : " + demandId);
-                    PaymentUpdateDto paymentUpdateDto = new PaymentUpdateDto(demandId,PaymentStatus.PAID);
-                    documentDemandClient.updatePaymentStatus(paymentUpdateDto);
+                    PaymentUpdateDTO paymentUpdateDTO = new PaymentUpdateDTO(demandId,PaymentStatus.PAID);
+                    documentDemandClient.updatePaymentStatus(paymentUpdateDTO);
                 } catch (EventDataObjectDeserializationException e) {
                     throw new RuntimeException("Could not deserialize session : " + e);
                 }
@@ -74,8 +74,8 @@ public class PaymentService implements IPaymentService {
                     Long demandId = extractDemandId(event);
                     System.out.println("demand id : " + demandId);
                     // mark the demand payment as failed
-                    PaymentUpdateDto paymentUpdateDto = new PaymentUpdateDto(demandId,PaymentStatus.FAILED);
-                    documentDemandClient.updatePaymentStatus(paymentUpdateDto);
+                    PaymentUpdateDTO paymentUpdateDTO = new PaymentUpdateDTO(demandId,PaymentStatus.FAILED);
+                    documentDemandClient.updatePaymentStatus(paymentUpdateDTO);
                 } catch (EventDataObjectDeserializationException e) {
                     throw new RuntimeException("Could not deserialize session : " + e);
                 }

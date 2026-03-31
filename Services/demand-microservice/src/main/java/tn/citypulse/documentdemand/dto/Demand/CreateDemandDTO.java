@@ -16,8 +16,6 @@ public class CreateDemandDTO {
     @NotNull(message = "Document type is required")
     private DocumentType documentType;
 
+    @NotNull(message = "Document demand description is required")
     private String description;
-
-    @NotNull(message = "Proof is required")
-    private CreateProofDTO proof;
 }
