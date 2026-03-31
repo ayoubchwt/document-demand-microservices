@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tn.citypulse.documentdemand.dto.Attachment.AttachmentResponseDTO;
-import tn.citypulse.documentdemand.dto.Attachment.CreateAttachmentDTO;
 import tn.citypulse.documentdemand.dto.Demand.CreateDemandDTO;
 import tn.citypulse.documentdemand.dto.Demand.DemandResponseDTO;
 import tn.citypulse.documentdemand.dto.Demand.UpdateDemandStatusDTO;
-import tn.citypulse.documentdemand.dto.Proof.CreateProofDTO;
 import tn.citypulse.documentdemand.dto.Proof.ProofResponseDTO;
 import tn.citypulse.documentdemand.mapper.AttachmentMapper;
 import tn.citypulse.documentdemand.mapper.DemandMapper;
@@ -85,14 +84,19 @@ public class DemandController {
     }
     // attach the requested doc by municipality after the docPaymentStatus is registered as "PAID"
     @PutMapping("/attachment")
-    public ResponseEntity<DemandResponseDTO> attachDocument(@ModelAttribute CreateAttachmentDTO dto) {
-        Demand updated = demandService.attachDocument(dto.getId(), dto.getFile());
+    public ResponseEntity<DemandResponseDTO> attachDocument(
+            @RequestParam Long id,
+            @RequestParam MultipartFile file) {
+        Demand updated = demandService.attachDocument(id, file);
         return ResponseEntity.ok(demandMapper.toDTO(updated));
     }
     // attach proof of the demand by user
     @PutMapping("/proof")
-    public ResponseEntity<DemandResponseDTO> proofDocument( @ModelAttribute CreateProofDTO dto) {
-        Demand updated = demandService.proofDocument(dto.getId(), dto.getFile(), dto.getType());
+    public ResponseEntity<DemandResponseDTO> proofDocument(
+            @RequestParam Long id,
+            @RequestParam MultipartFile file,
+            @RequestParam ProofType type) {
+        Demand updated = demandService.proofDocument(id, file, type);
         return ResponseEntity.ok(demandMapper.toDTO(updated));
     }
     // get the proof by the municipality

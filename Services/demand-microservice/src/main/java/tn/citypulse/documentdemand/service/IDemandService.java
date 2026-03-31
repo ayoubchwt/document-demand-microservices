@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tn.citypulse.documentdemand.model.Attachment;
 import tn.citypulse.documentdemand.model.Demand;
 import tn.citypulse.documentdemand.model.Enum.DemandStatus;
+import tn.citypulse.documentdemand.model.Enum.ProofType;
 import tn.citypulse.documentdemand.model.Proof;
 import tn.citypulse.shared.enums.DocumentType;
 import tn.citypulse.shared.enums.PaymentStatus;
@@ -32,7 +33,7 @@ public interface IDemandService {
 
     Demand attachDocument(Long demandId, MultipartFile file);
 
-    Demand proofDocument(Long demandId, MultipartFile file, String type);
+    Demand proofDocument(Long demandId, MultipartFile file, ProofType type);
 
     void deleteDemand(Long id);
 }

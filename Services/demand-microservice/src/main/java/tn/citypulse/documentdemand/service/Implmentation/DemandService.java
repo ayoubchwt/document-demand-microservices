@@ -120,14 +120,10 @@ public class DemandService implements IDemandService {
 
     @Override
     @Transactional
-    public Demand proofDocument(Long demandId, MultipartFile file, String type) {
+    public Demand proofDocument(Long demandId, MultipartFile file, ProofType type) {
         Demand demand = getDemandOrThrow(demandId);
         Proof proof = new Proof();
-        try {
-            proof.setType(ProofType.valueOf(type.toUpperCase()));
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid proof type: " + type);
-        }
+        proof.setType(type);
         String uploadUrl = cloudinaryService.uploadFile(file, "Proof");
         proof.setFileUrl(uploadUrl);
         demand.setProof(proof);
