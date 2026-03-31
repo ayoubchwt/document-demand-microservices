@@ -5,7 +5,7 @@ info:
 
 http:
   method: POST
-  url: http://localhost:8087/demands
+  url: http://localhost:8082/demands
   body:
     type: json
     data: |-
@@ -13,10 +13,7 @@ http:
         "userId": 1,
         "documentType": "BIRTH_CERTIFICATE",
         "description": "Request for administrative purposes",
-        "proof": {
-          "type": "NATIONAL_ID",
-          "fileUrl": "https://example.com/proofs/idcard.pdf"
-        }
+        "Nerdery" : 1
       }
   auth: inherit
 

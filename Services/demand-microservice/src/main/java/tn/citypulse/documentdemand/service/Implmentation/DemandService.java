@@ -62,7 +62,7 @@ public class DemandService implements IDemandService {
         }
         return demandRepository.findAllByStatus(demandStatus);
     }
-
+    
     @Override
     public Demand updateDemandStatus(Long id , DemandStatus demandStatus){
         if(demandStatus == null) {

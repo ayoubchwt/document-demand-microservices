@@ -1,10 +1,10 @@
 info:
-  name: getDocumentProof
+  name: AttachDocument
   type: http
-  seq: 10
+  seq: 11
 
 http:
-  method: GET
+  method: PUT
   url: http://localhost:8082/demands/3/proof
   auth: inherit
 

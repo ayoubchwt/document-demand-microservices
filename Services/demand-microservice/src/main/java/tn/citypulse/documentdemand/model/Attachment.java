@@ -14,9 +14,6 @@ public class Attachment {
     private Long id;
 
     @Column(nullable = false)
-    private String fileName;
-
-    @Column(nullable = false)
     private String fileUrl;
 
     @Column(nullable = false)

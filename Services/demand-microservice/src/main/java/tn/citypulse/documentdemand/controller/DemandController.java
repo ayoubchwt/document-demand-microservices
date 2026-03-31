@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.citypulse.documentdemand.dto.Attachment.AttachmentResponseDTO;
 import tn.citypulse.documentdemand.dto.Attachment.CreateAttachmentDTO;
 import tn.citypulse.documentdemand.dto.Demand.CreateDemandDTO;
 import tn.citypulse.documentdemand.dto.Demand.DemandResponseDTO;
@@ -13,6 +14,7 @@ import tn.citypulse.documentdemand.feign.PaymentClient;
 import tn.citypulse.documentdemand.mapper.AttachmentMapper;
 import tn.citypulse.documentdemand.mapper.DemandMapper;
 import tn.citypulse.documentdemand.mapper.ProofMapper;
+import tn.citypulse.documentdemand.model.Attachment;
 import tn.citypulse.documentdemand.model.Demand;
 import tn.citypulse.documentdemand.model.Enum.DemandStatus;
 import tn.citypulse.documentdemand.model.Enum.ProofType;
@@ -72,8 +74,11 @@ public class DemandController {
     @PutMapping("/{id}/attachment")
     public ResponseEntity<DemandResponseDTO> attachDocument(
             @PathVariable Long id,
-            @RequestBody CreateAttachmentDTO dto) {
-        Demand updated = demandService.attachDocument(id, attachmentMapper.toEntity(dto));
+            @ModelAttribute CreateAttachmentDTO dto) {
+        String uploadUrl = cloudinaryService.uploadFile(dto.getFile(), "Attachment");
+        Attachment attachment = attachmentMapper.toEntity(dto);
+        attachment.setFileUrl(uploadUrl);
+        Demand updated = demandService.attachDocument(id, attachment);
         return ResponseEntity.ok(demandMapper.toDTO(updated));
     }
     @PutMapping("/{id}/proof")
@@ -98,6 +103,12 @@ public class DemandController {
             @PathVariable Long id) {
         Proof proof = proofService.getProofByDemandId(id);
         return ResponseEntity.ok(proofMapper.toDTO(proof));
+    }
+    @GetMapping("/{id}/attachment")
+    public ResponseEntity<AttachmentResponseDTO> getDocumentAttachment(
+            @PathVariable Long id) {
+        Attachment attachment = attachmentService.getAttachmentByDemandId(id);
+        return ResponseEntity.ok(attachmentMapper.toDTO(attachment));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDemand(@PathVariable Long id) {
