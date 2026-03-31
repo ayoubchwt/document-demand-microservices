@@ -6,6 +6,7 @@ import tn.citypulse.documentdemand.dto.Attachment.AttachmentResponseDTO;
 import tn.citypulse.documentdemand.dto.Proof.ProofResponseDTO;
 import tn.citypulse.documentdemand.model.Enum.DemandStatus;
 import tn.citypulse.shared.enums.DocumentType;
+import tn.citypulse.shared.enums.PaymentStatus;
 
 import java.time.LocalDateTime;
 
@@ -23,6 +24,8 @@ public class DemandResponseDTO {
     private String description;
 
     private DemandStatus status;
+
+    private PaymentStatus paymentStatus;
 
     private LocalDateTime createdAt;
 

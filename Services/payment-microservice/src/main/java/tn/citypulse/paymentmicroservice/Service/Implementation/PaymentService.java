@@ -33,7 +33,7 @@ public class PaymentService implements IPaymentService {
                                     .setPriceData(
                                             SessionCreateParams.LineItem.PriceData.builder()
                                                     .setCurrency("usd")
-                                                    .setUnitAmount(price * 100L)
+                                                    .setUnitAmount(price)
                                                     .setProductData(
                                                             SessionCreateParams.LineItem.PriceData.ProductData.builder()
                                                                     .setName("Document Demand #" + demandId)
