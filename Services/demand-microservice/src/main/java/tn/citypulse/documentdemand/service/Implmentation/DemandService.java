@@ -95,7 +95,7 @@ public class DemandService implements IDemandService {
         }
         Demand demand = getDemandOrThrow(id);
         if (demand.getStatus() != DemandStatus.APPROVED) {
-            throw new InvalidDemandStateException("Only IN_REVIEW demands can be updated");
+            throw new InvalidDemandStateException("Only APPROVED demands can be paid");
         }
         demand.setPaymentStatus(paymentStatus);
         return demandRepository.save(demand);
