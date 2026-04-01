@@ -22,7 +22,6 @@ import tn.citypulse.documentdemand.model.Enum.DemandStatus;
 import tn.citypulse.documentdemand.model.Enum.ProofType;
 import tn.citypulse.documentdemand.model.Proof;
 import tn.citypulse.documentdemand.service.IAttachmentService;
-import tn.citypulse.documentdemand.service.ICloudinaryService;
 import tn.citypulse.documentdemand.service.IDemandService;
 import tn.citypulse.documentdemand.service.IProofService;
 import tn.citypulse.shared.dto.DocumentTypeResponseDTO;
