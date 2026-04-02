@@ -76,6 +76,20 @@ services:
       - document-demand-net
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+  ngrok : 
+    image: ngrok/ngrok:latest
+    container_name : ngrok-tunnel
+    command: 
+      - "http"
+      - "api-gateway:8087"
+    environment:
+      - NGROK_AUTHTOKEN=***REMOVED***
+    ports:
+      - "4040:4040"
+    depends_on:
+      - api-gateway
+    networks:
+      - document-demand-net
 networks:
     document-demand-net:
       driver: bridge
