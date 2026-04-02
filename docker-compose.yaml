@@ -1,0 +1,82 @@
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: document-demand-db
+    ports: 
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=DocumentDemand
+    networks:
+      - document-demand-net
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  eureka-server:
+    build:
+      context: ./Infrastructure/Eureka-server
+      dockerfile: Dockerfile
+    container_name: eureka-server
+    ports: 
+      - "8761:8761"
+    networks:
+      - document-demand-net
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 10s
+      retries: 5
+  api-gateway:
+    build:
+      context: ./Infrastructure/Api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports: 
+      - "8087:8087"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - document-demand-net
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+  demand-service:
+    build:
+      context: ./Services
+      dockerfile: Dockerfile
+      target: demand-runtime
+    container_name: demand-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - document-demand-net
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/DocumentDemand?createDatabaseIfNotExist=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+  payment-service:
+    build:
+      context: ./Services
+      dockerfile: Dockerfile
+      target: payment-runtime
+    container_name: payment-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - document-demand-net
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+networks:
+    document-demand-net:
+      driver: bridge
+

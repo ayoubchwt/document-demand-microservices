@@ -32,7 +32,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/demands")
-@CrossOrigin("http://localhost:8087")
 @AllArgsConstructor
 @Tag(name = "Demands", description = "Endpoints for managing document demands, proofs, and attachments")
 public class DemandController {

@@ -11,7 +11,6 @@ import tn.citypulse.paymentmicroservice.Service.IPaymentService;
 
 @RestController
 @RequestMapping("/payment")
-@CrossOrigin("http://localhost:8087")
 @RequiredArgsConstructor
 @Tag(name = "Payments", description = "Endpoints for managing Stripe payment sessions and secure webhooks")
 public class PaymentController {
