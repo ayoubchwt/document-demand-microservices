@@ -7,9 +7,9 @@
         <groupId>tn.citypulse</groupId>
         <artifactId>document-management-microservice</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
-    
+
     <artifactId>shared</artifactId>
     <name>Shared package</name>
     <description>This is a shared package between microservices contains all the necessary the enums , dto ext ..</description>
