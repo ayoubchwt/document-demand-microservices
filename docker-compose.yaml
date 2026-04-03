@@ -2,7 +2,7 @@ services:
   mysql-db:
     image: mysql:8.0
     container_name: document-demand-db
-    ports: 
+    ports:
       - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root
@@ -19,7 +19,7 @@ services:
       context: ./Infrastructure/Eureka-server
       dockerfile: Dockerfile
     container_name: eureka-server
-    ports: 
+    ports:
       - "8761:8761"
     networks:
       - document-demand-net
@@ -32,7 +32,7 @@ services:
       context: ./Infrastructure/Api-gateway
       dockerfile: Dockerfile
     container_name: api-gateway
-    ports: 
+    ports:
       - "8087:8087"
     depends_on:
       eureka-server:
@@ -61,6 +61,9 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
   payment-service:
     build:
       context: ./Services
@@ -76,14 +79,16 @@ services:
       - document-demand-net
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
-  ngrok : 
+      - STRIPE_KEY_SECRET=${STRIPE_KEY_SECRET}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+  ngrok:
     image: ngrok/ngrok:latest
-    container_name : ngrok-tunnel
-    command: 
+    container_name: ngrok-tunnel
+    command:
       - "http"
       - "api-gateway:8087"
     environment:
-      - NGROK_AUTHTOKEN=***REMOVED***
+      - NGROK_AUTHTOKEN=${USER_NGROK_TOKEN}
     ports:
       - "4040:4040"
     depends_on:
@@ -91,6 +96,5 @@ services:
     networks:
       - document-demand-net
 networks:
-    document-demand-net:
-      driver: bridge
-
+  document-demand-net:
+    driver: bridge
