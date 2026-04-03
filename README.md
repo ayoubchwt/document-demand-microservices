@@ -1,6 +1,15 @@
 # Document Demand Microservices
 
-Full-stack microservices backend built with Spring Cloud and Docker. Features a central API Gateway for routing, Netflix Eureka for service discovery, and a fully decoupled architecture. Includes a secure Stripe payment flow using webhooks and Cloudinary integration for cloud-based file management. The entire environment is containerized for one-command deployment.
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![Spring Cloud](https://img.shields.io/badge/Spring%20Cloud-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Stripe](https://img.shields.io/badge/Stripe-008CDD?style=for-the-badge&logo=stripe&logoColor=white)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)
+![Ngrok](https://img.shields.io/badge/Ngrok-1F1E1E?style=for-the-badge&logo=ngrok&logoColor=white)
+![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white)
+
+> Full-stack microservices backend built with Spring Cloud and Docker. Features a central API Gateway for routing, Netflix Eureka for service discovery, and a fully decoupled architecture. Includes a secure Stripe payment flow using webhooks and Cloudinary integration for cloud-based file management. The entire environment is containerized for one-command deployment.
 
 ---
 
