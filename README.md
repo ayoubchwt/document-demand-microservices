@@ -10,7 +10,12 @@
 ![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
 
-> Full-stack microservices backend built with Spring Cloud and Docker. Features a central API Gateway for routing, Netflix Eureka for service discovery, and a fully decoupled architecture. Includes a secure Stripe payment flow using webhooks and Cloudinary integration for cloud-based file management. The entire environment is containerized for one-command deployment.
+Full-stack microservices backend built with Spring Cloud and Docker. Features a central API Gateway for routing, Netflix Eureka for service discovery, and a fully decoupled architecture. Includes a secure Stripe payment flow using webhooks and Cloudinary integration for cloud-based file management. The entire environment is containerized for one-command deployment.
+
+<p align="center">
+  <img src="screenshots/demand-docs.png" width="49%" />
+  <img src="screenshots/payment-docs.png" width="49%" />
+</p>
 
 ---
 
