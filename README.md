@@ -155,3 +155,11 @@ docker compose down
 - CI/CD pipeline via Jenkins
 - Kubernetes deployment manifests
 - Centralized logging with Grafana
+
+---
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
